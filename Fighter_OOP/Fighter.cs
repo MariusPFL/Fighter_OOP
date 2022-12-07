@@ -25,6 +25,10 @@ namespace Fighter_OOP
 			set { _index = value; }
 		}
 
+		/// <summary>
+		/// When the Player Dies how good he was in the game
+		/// If he dies early he has an higher Rank if he is the winner his rank will be one
+		/// </summary>
 		private int _rank;
 
 		public int rank
@@ -67,6 +71,13 @@ namespace Fighter_OOP
 			get { return _baseDamage; }
 			set { _baseDamage = value; }
 		}
+
+
+		/// <summary>
+		/// Ctor
+		/// </summary>
+		/// <param name="name">Name of the Player</param>
+		/// <param name="index">Index of the Player</param>
 		public Fighter(String name, int index)
 		{
 			hitPoints = 100;
@@ -84,16 +95,29 @@ namespace Fighter_OOP
 			enemy.hitPoints -= baseDamage;
 		}
 
+		/// <summary>
+		/// Virtual method shows the status of the player
+		/// </summary>
+		/// <returns></returns>
 		public virtual String getDescription()
 		{
 			return "";
 		}
+
+		/// <summary>
+		/// Virtual Method describe the Attacks of the Players
+		/// </summary>
+		/// <returns></returns>
 
         public virtual String getAttackDescription()
         {
             return "";
         }
 
+		/// <summary>
+		/// Currently Obsolete
+		/// </summary>
+		/// <returns></returns>
         public Boolean surrenders()
 		{
 			return hitPoints <= 0;

@@ -21,7 +21,10 @@ namespace Fighter_OOP
         {
             this.footSize = footSize;
         }
-
+        /// <summary>
+        /// SpecialAttack of the Kicker
+        /// </summary>
+        /// <param name="enemy">The enemy which should be Attacked</param>
         public void Kick(Fighter enemy)
         {
             enemy.hitPoints -= baseDamage * footSize;
