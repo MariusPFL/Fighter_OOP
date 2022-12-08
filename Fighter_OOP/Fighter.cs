@@ -19,7 +19,7 @@ namespace Fighter_OOP
 		/// </summary>
         private int _index;
 
-		public int index
+		public int Index
 		{
 			get { return _index; }
 			set { _index = value; }
@@ -31,7 +31,7 @@ namespace Fighter_OOP
 		/// </summary>
 		private int _rank;
 
-		public int rank
+		public int Rank
 		{
 			get { return _rank; }
 			set { _rank = value; }
@@ -43,7 +43,7 @@ namespace Fighter_OOP
 		/// </summary>
 		private String _name;
 
-		public String name
+		public String Name
 		{
 			get { return _name; }
 			set { _name = value; }
@@ -54,7 +54,7 @@ namespace Fighter_OOP
 		/// </summary>
 		private double _hitPoints;
 
-		public double hitPoints
+		public double HitPoints
 		{
 			get { return _hitPoints; }
 			set { _hitPoints = value; }
@@ -66,7 +66,7 @@ namespace Fighter_OOP
 		/// </summary>
 		private double _baseDamage;
 
-		public double baseDamage
+		public double BaseDamage
 		{
 			get { return _baseDamage; }
 			set { _baseDamage = value; }
@@ -80,10 +80,10 @@ namespace Fighter_OOP
 		/// <param name="index">Index of the Player</param>
 		public Fighter(String name, int index)
 		{
-			hitPoints = 100;
-			baseDamage = 10;
-			this.name = name;
-			this.index = index;
+			HitPoints = 100;
+			BaseDamage = 10;
+			this.Name = name;
+			this.Index = index;
 		}
 
 		/// <summary>
@@ -92,14 +92,14 @@ namespace Fighter_OOP
 		/// <param name="enemy">Tehe enemy Fighter</param>
 		public void Attack (Fighter enemy)
 		{
-			enemy.hitPoints -= baseDamage;
+			enemy.HitPoints -= BaseDamage;
 		}
 
 		/// <summary>
 		/// Method shows the status of the player
 		/// </summary>
 		/// <returns></returns>
-		public virtual String getDescription()
+		public virtual String GetDescription()
 		{
 			return "";
 		}
@@ -109,12 +109,12 @@ namespace Fighter_OOP
 		/// </summary>
 		/// <returns></returns>
 
-        public virtual String getAttackDescription()
+        public virtual String GetAttackDescription()
         {
             return "";
         }
 
-		public virtual void specialAttack(Fighter enemy)
+		public virtual void SpecialAttack(Fighter enemy)
 		{
 
 		}
@@ -123,9 +123,9 @@ namespace Fighter_OOP
 		/// Currently Obsolete
 		/// </summary>
 		/// <returns></returns>
-        public Boolean surrenders()
+        public Boolean Surrenders()
 		{
-			return hitPoints <= 0;
+			return HitPoints <= 0;
 		}
 	}
 }

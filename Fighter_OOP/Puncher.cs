@@ -13,7 +13,7 @@ namespace Fighter_OOP
         /// </summary>
 		private double _fistSize;
 
-		public double fistSize
+		public double FistSize
 		{
 			get { return _fistSize; }
 			set { _fistSize = value; }
@@ -28,25 +28,25 @@ namespace Fighter_OOP
 
 		public Puncher(double fistSize, String name, int index) : base(name, index)
         {
-            this.fistSize = fistSize;
+            this.FistSize = fistSize;
         }
 
         /// <summary>
         /// Special Attack attacks the enemies
         /// </summary>
         /// <param name="enemy">The enemy which should be attacked</param>
-        public override void specialAttack(Fighter enemy)
+        public override void SpecialAttack(Fighter enemy)
         {
-            enemy.hitPoints -= baseDamage * fistSize;
+            enemy.HitPoints -= BaseDamage * FistSize;
         }
 
 
-        public override String getDescription()
+        public override String GetDescription()
         {
-            return $"{name} Status: \n {hitPoints} hp left \n BaseDamage is: {baseDamage} {textBorder}";
+            return $"{Name} Status: \n {HitPoints} hp left \n BaseDamage is: {BaseDamage} {textBorder}";
         }
 
-        public override String getAttackDescription()
+        public override String GetAttackDescription()
         {
             return $"your current Attacks are \n Baseattack (press y) \n Punch (press n) {textBorder}";
         }

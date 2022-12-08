@@ -13,7 +13,7 @@ namespace Fighter_OOP
         /// </summary>
         private double _footSize;
 
-        public double footSize
+        public double FootSize
         {
             get { return _footSize; }
             set { _footSize = value; }
@@ -21,16 +21,16 @@ namespace Fighter_OOP
 
         public Kicker(double footSize, String name, int index) : base(name, index)
         {
-            this.footSize = footSize;
+            this.FootSize = footSize;
         }
 
         /// <summary>
         /// Specialattack attacks the enemies
         /// </summary>
         /// <param name="enemy">The enemy which should be attacked</param>
-        public override void specialAttack(Fighter enemy)
+        public override void SpecialAttack(Fighter enemy)
         {
-            enemy.hitPoints -= baseDamage * footSize;
+            enemy.HitPoints -= BaseDamage * FootSize;
         }
 
         /// <summary>
@@ -39,15 +39,15 @@ namespace Fighter_OOP
         /// <param name="enemy">The enemy which should be attacked</param>
         public void Kick(Fighter enemy)
         {
-            enemy.hitPoints -= baseDamage * footSize;
+            enemy.HitPoints -= BaseDamage * FootSize;
         }
 
-        public override String getDescription()
+        public override String GetDescription()
         {
-            return $"{name} Status: \n {hitPoints} hp left \n {name} BaseDamage is: {baseDamage} {textBorder}";
+            return $"{Name} Status: \n {HitPoints} hp left \n {Name} BaseDamage is: {BaseDamage} {textBorder}";
         }
 
-        public override String getAttackDescription()
+        public override String GetAttackDescription()
         {
             return $"your current Attacks are \n Baseattack (press y) \n Kick (press n) {textBorder}";
         }

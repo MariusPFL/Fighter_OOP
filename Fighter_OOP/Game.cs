@@ -8,20 +8,22 @@ namespace Fighter_OOP
 {
     internal class Game
     {
-        private Random random = new Random();
-        public int roundCounter { get; set; }
+        private Random Random { get; set; }
+        public int RoundCounter { get; set; }
 
-        public List<Fighter> deadFighterList { get; set; }
+        public List<Fighter> DeadFighterList { get; set; }
 
-        public Fighter winner { get; set; }
+        public Fighter Winner { get; set; }
 
-        public String historyLog { get; set; }
+        public String HistoryLog { get; set; }
+
         public Game()
         {
-            deadFighterList = new List<Fighter>();
+            DeadFighterList = new List<Fighter>();
+            Random= new Random();
         }
 
-        //For Random games
+        //Obsolete
         public Game(Fighter fighter1, Fighter fighter2)
         {
             RandomGame(fighter1, fighter2);
@@ -31,38 +33,38 @@ namespace Fighter_OOP
             Boolean gameIsRunning = true;
             do
             {
-                switch (random.Next(1, 4))
+                switch (Random.Next(1, 4))
                 {
                     case 1:
                         fighter1.Attack(fighter2);
-                        historyLog += $"{fighter1.name} attacked {fighter2.name} with the Normalattack \n hp left \n {fighter1.name}: {fighter1.hitPoints} \n {fighter2.name}: {fighter2.hitPoints}  hp \n";
+                        HistoryLog += $"{fighter1.Name} attacked {fighter2.Name} with the Normalattack \n hp left \n {fighter1.Name}: {fighter1.HitPoints} \n {fighter2.Name}: {fighter2.HitPoints}  hp \n";
                         break;
                     case 2:
-                        fighter1.specialAttack(fighter2);
-                        historyLog += $"{fighter1.name} attacked {fighter2.name} with his Specialattack as \n hp left \n {fighter1.name}: {fighter1.hitPoints} \n {fighter2.name}: {fighter2.hitPoints} hp \n";
+                        fighter1.SpecialAttack(fighter2);
+                        HistoryLog += $"{fighter1.Name} attacked {fighter2.Name} with his Specialattack as \n hp left \n {fighter1.Name}: {fighter1.HitPoints} \n {fighter2.Name}: {fighter2.HitPoints} hp \n";
                         break;
                     case 3:
                         fighter2.Attack(fighter1);
-                        historyLog += $"{fighter2.name} attacked {fighter1.name} with the Normalattack \n hp left \n {fighter1.name}: {fighter1.hitPoints} \n {fighter2.name}: {fighter2.hitPoints} hp \n";
+                        HistoryLog += $"{fighter2.Name} attacked {fighter1.Name} with the Normalattack \n hp left \n {fighter1.Name}: {fighter1.HitPoints} \n {fighter2.Name}: {fighter2.HitPoints} hp \n";
                         break;
                     case 4:
-                        fighter2.specialAttack(fighter1);
-                        historyLog += $"{fighter2.name} attacked {fighter1.name} with the Specialattack \n hp left \n {fighter1.name}: {fighter1.hitPoints} hp \n {fighter2.name}: {fighter2.hitPoints} hp \n";
+                        fighter2.SpecialAttack(fighter1);
+                        HistoryLog += $"{fighter2.Name} attacked {fighter1.Name} with the Specialattack \n hp left \n {fighter1.Name}: {fighter1.HitPoints} hp \n {fighter2.Name}: {fighter2.HitPoints} hp \n";
                         break;
                 }
-                if (fighter1.surrenders() || fighter2.surrenders())
+                if (fighter1.Surrenders() || fighter2.Surrenders())
                 {
                     gameIsRunning= false;
                 }
-                roundCounter++;
+                RoundCounter++;
             } while (gameIsRunning);
-            if (fighter1.surrenders())
+            if (fighter1.Surrenders())
             {
-                winner = fighter2;
+                Winner = fighter2;
             }
             else
             {
-                winner = fighter1;
+                Winner = fighter1;
             }
         }
 
