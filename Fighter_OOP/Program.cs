@@ -19,7 +19,7 @@ namespace Fighter_OOP
             #region Startmenu
             // Create the Players and Characters
             int fighterCounter = 0;
-            Boolean isPlayerSelectionFinished = false;
+            Boolean isPlayerSelectionFinished;
             do
             {
                 Console.WriteLine("Type in your Playername: ");
@@ -234,7 +234,7 @@ namespace Fighter_OOP
                 }
                 catch (OverflowException)
                 {
-                    Console.WriteLine("Bitte gib seriöse Daten ein!");
+                    Console.WriteLine("Please type in serious data!");
                     isInvalid = true;
                 }
                 catch (FormatException)

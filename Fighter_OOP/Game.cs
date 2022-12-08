@@ -44,7 +44,7 @@ namespace Fighter_OOP
                         break;
                     case 2:
                         fighter1.SpecialAttack(fighter2);
-                        HistoryLog += $"{fighter1.Name} attacked {fighter2.Name} with his Specialattack as \n hp left \n {fighter1.Name}: {fighter1.HitPoints} \n {fighter2.Name}: {fighter2.HitPoints} hp \n";
+                        HistoryLog += $"{fighter1.Name} attacked {fighter2.Name} with his Specialattack \n hp left \n {fighter1.Name}: {fighter1.HitPoints} \n {fighter2.Name}: {fighter2.HitPoints} hp \n";
                         break;
                     case 3:
                         fighter2.Attack(fighter1);
