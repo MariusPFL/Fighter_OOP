@@ -30,14 +30,15 @@ namespace Fighter_OOP
         {
             this.fistSize = fistSize;
         }
+
         /// <summary>
         /// Special Attack attacks the enemies
         /// </summary>
         /// <param name="enemy">The enemy which should be attacked</param>
-		public void Punch(Fighter enemy)
-		{
-			enemy.hitPoints -= baseDamage * fistSize;
-		}
+        public override void specialAttack(Fighter enemy)
+        {
+            enemy.hitPoints -= baseDamage * fistSize;
+        }
 
 
         public override String getDescription()

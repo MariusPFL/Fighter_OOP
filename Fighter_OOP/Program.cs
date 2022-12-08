@@ -10,6 +10,7 @@ namespace Fighter_OOP
     {
         static void Main(string[] args)
         {
+            Game game = new Game();
             Fighter[] fighterArr = new Fighter[0];
             //Kicker kicker1 = new Kicker(4.10, "Klaus der Kicker");
             //Puncher puncher1 = new Puncher(4.11, "Paul der Puncher");
@@ -17,31 +18,57 @@ namespace Fighter_OOP
             #region Startmenu
             // Create the Players and Characters
             int fighterCounter = 0;
+            Boolean isInvalidPlayerCount = false;
             do
             {
-                fighterArr = ExpandArray(fighterArr);
                 Console.WriteLine("Type in your Playername: ");
                 String name = Console.ReadLine();
-                if (AnswerYN("Puncher (y) or Kicker (n) (press y/n)"))
+                double fighterType = RequestPositiveNumberFromUser("Puncher (1) or Kicker (2) (press 1/2)", 1, 2);
+                if (fighterType == 1)
                 {
-                    Console.WriteLine("Select the Fistsize");
-                    double size = Convert.ToDouble(Console.ReadLine());
+                    double size = RequestPositiveNumberFromUser("Select the Fistsize max 10!", 0, 10);
                     Puncher puncher = new Puncher(size, name, fighterCounter);
-                    fighterArr = addItem(fighterArr, puncher);
+                    fighterArr = AddFighter(fighterArr, puncher);
                 }
                 else
                 {
-                    Console.WriteLine("Select the Footsize");
-                    double size = Convert.ToDouble(Console.ReadLine());
+                    double size = RequestPositiveNumberFromUser("Select the Footsize max 10!", 0, 10);
                     Kicker kicker = new Kicker(size, name, fighterCounter);
-                    fighterArr = addItem(fighterArr, kicker);
+                    fighterArr = AddFighter(fighterArr, kicker);
                 }
                 fighterCounter++;
+                //BotGame
+                if (fighterCounter == 2)
+                {
+                    if (AnswerYN("Do you want to start a Botgame?"))
+                    {
+                        game.RandomGame(fighterArr[0], fighterArr[1]);
+                        Console.WriteLine($"{Fighter.textBorder}The winner is: {game.winner.name} after {game.roundCounter} Rounds. {Fighter.textBorder}");
+                        Console.WriteLine(game.historyLog + Fighter.textBorder + "press any Key to continue and start a new Game");
+                        Console.ReadKey();
+                        fighterArr = new Fighter[0];
+                        game = new Game();
+                        fighterCounter = 0;
+                        Console.Clear();
+
+                    }
+                }
+                // Gives User direct Feedback what is wrong
+                if (fighterCounter < 2)
+                {
+                    Console.WriteLine("Fighter Counter to low should be at least 2!");
+                }
+                if (fighterCounter == 99)
+                {
+                    Console.WriteLine("Please be aware that you maximaly can add 100 Players");
+                }
+
             } while ((AnswerYN("Wanna add another Player ? (y/n)") || fighterCounter < 2) && fighterCounter < 100);
 
 
             #endregion
-            Fighter[] allFightersArr = fighterArr;
+
+            #region manual Maingame
             Console.WriteLine("Welcome to the Game! \n let's start!");
             Console.ReadKey();
 
@@ -54,7 +81,7 @@ namespace Fighter_OOP
                     Console.WriteLine($"Hello {player.name} it is your turn!");
                     Console.ReadKey();
                     // Displays the Player Status
-                    Console.WriteLine($"{player.getDescription()}  {player.getAttackDescription()} You have following enemies: ");
+                    Console.WriteLine($"{player.getDescription()}  {player.getAttackDescription()} You have the following enemies: ");
                     // Displays the enemies
                     foreach (var enemy in fighterArr)
                     {
@@ -64,7 +91,7 @@ namespace Fighter_OOP
                         }
                     }
 
-                    // Check the Userinput
+                    // User choose a Enemy to attack
                     int targetEnemyIndex = 0;
                     bool isInValid = true;
                     Fighter targetEnemy;
@@ -91,6 +118,7 @@ namespace Fighter_OOP
                         }
                     } while (isInValid);
                     targetEnemy = fighterArr[targetEnemyIndex];
+                    // User choose an attack
                     Console.WriteLine(Fighter.textBorder);
                     if (AnswerYN($"{player.getAttackDescription()} type in which attack you wanna execute on {targetEnemy.name}."))
                     {
@@ -98,27 +126,27 @@ namespace Fighter_OOP
                     }
                     else
                     {
-                        if (player is Kicker)
-                        {
-                            Kicker kicker = (Kicker)player;
-                            kicker.Kick(targetEnemy);
-                        }
-                        else
-                        {
-                            Puncher puncher = (Puncher)player;
-                            puncher.Punch(targetEnemy);
-                        }
+                        player.specialAttack(targetEnemy);
+                        //if (player is Kicker)
+                        //{
+                        //    Kicker kicker = (Kicker)player;
+                        //    kicker.Kick(targetEnemy);
+                        //}
+                        //else
+                        //{
+                        //    Puncher puncher = (Puncher)player;
+                        //    puncher.Punch(targetEnemy);
+                        //}
                     }
                     // If the Player wanna continue
-                    if (AnswerYN("You wanna stop playing ?"))
-                    {
-                        fighterArr = removeFighter(fighterArr, player);
-                    }
+                    //if (AnswerYN("You wanna stop playing ?"))
+                    //{
+                    //    fighterArr = RemoveFighter(fighterArr, player, game);
+                    //}
                     // Kicks out Death Players
-                    if (someoneSurrendered(fighterArr))
+                    if (HasSomeoneSurrendered(fighterArr))
                     {
-                        whoSurrendered(fighterArr).rank = fighterArr.Length;
-                        fighterArr = removeFighter(fighterArr, whoSurrendered(fighterArr));
+                        fighterArr = RemoveFighter(fighterArr, WhoSurrendered(fighterArr), game);
                         // Update the Indexes
                         for (int i = 0; i < fighterArr.Length; i++)
                         {
@@ -126,36 +154,77 @@ namespace Fighter_OOP
                         }
                     }
                 }
-
-
-
-
             } while (fighterArr.Length > 1 && continueGame);
             Console.Clear();
+            #endregion
 
-            // Win Animation
-
+            #region end win
             fighterArr[0].rank = 1;
+            game.deadFighterList.Add(fighterArr[0]);
             Console.WriteLine($"Congratulation {fighterArr[0].name} YOU DID IT YOU WON!!!! {Fighter.textBorder}");
             Console.WriteLine("The Ranklist: \n");
-            foreach (var item in allFightersArr)
+            foreach (var item in game.deadFighterList)
             {
                 Console.WriteLine($"{item.name} with Rank {item.rank}");
             }
             Console.ReadKey();
-        }
+            #endregion
 
+        }
 
         #region Methods
 
-        public static Fighter[] removeFighter(Fighter[] fighterArr, Fighter fighter)
+        public static Fighter[] RemoveFighter(Fighter[] fighterArr, Fighter fighter, Game currentGame)
         {
+            fighter.rank = fighterArr.Length;
             List<Fighter> fighterList = fighterArr.ToList();
             fighterList.Remove(fighter);
+            currentGame.deadFighterList.Add(fighter);
             return fighterList.ToArray();
         }
 
-        public static Boolean someoneSurrendered(Fighter[] fighterArr)
+        /// <summary>
+        /// Adds an item to the Array
+        /// </summary>
+        /// <param name="fighterArr">The Fighter array where the item should be added</param>
+        /// <param name="fighter">The item which should be added. Should be a Fighter</param>
+        /// <returns></returns>
+        public static Fighter[] AddFighter(Fighter[] fighterArr, Fighter fighter)
+        {
+            List<Fighter> fighterList = fighterArr.ToList();
+            fighterList.Add(fighter);
+            return fighterList.ToArray();
+        }
+        public static double RequestPositiveNumberFromUser(String displayText, double minRange = 0, double maxRange = int.MaxValue)
+        {
+            Console.WriteLine(displayText);
+            double number = 0;
+            Boolean isInvalid = false;
+            do
+            {
+                try
+                {
+                    number = Convert.ToDouble(Console.ReadLine().Trim(' '));
+                    if (number < minRange || number > maxRange)
+                    {
+                        Console.WriteLine("Please type in a number from the given Range!");
+                        isInvalid = true;
+                    }
+                    else
+                    {
+                        isInvalid = false;
+                    }
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Please type in a Number!");
+                    isInvalid = true;
+                }
+            } while (isInvalid);
+            return number;
+        }
+
+        public static Boolean HasSomeoneSurrendered(Fighter[] fighterArr)
         {
             foreach (var item in fighterArr)
             {
@@ -167,7 +236,7 @@ namespace Fighter_OOP
             return false;
         }
 
-        public static Fighter whoSurrendered(Fighter[] fighterArr)
+        public static Fighter WhoSurrendered(Fighter[] fighterArr)
         {
             foreach (var item in fighterArr)
             {
@@ -179,18 +248,7 @@ namespace Fighter_OOP
             return null;
         }
 
-        /// <summary>
-        /// Adds an item to the Array
-        /// </summary>
-        /// <param name="fighterArr">The Fighter array where the item should be added</param>
-        /// <param name="item">The item which should be added. Should be a Fighter</param>
-        /// <returns></returns>
-        public static Fighter[] addItem(Fighter[] fighterArr, Fighter item)
-        {
-            List<Fighter> fighterList = fighterArr.ToList();
-            fighterList.Add(item);
-            return fighterList.ToArray();
-        }
+
 
 
 
@@ -198,7 +256,6 @@ namespace Fighter_OOP
         public static Fighter[] ExpandArray(Fighter[] fighterArray)
         {
             Fighter[] endArray = new Fighter[fighterArray.Length + 1];
-            endArray = fighterArray;
             for (int i = 0; i < fighterArray.Length; i++)
             {
                 endArray[i] = fighterArray[i];
@@ -230,8 +287,8 @@ namespace Fighter_OOP
                     Console.WriteLine("Sorry didn't understand that");
                 }
             }
-
         }
         #endregion
+
     }
 }

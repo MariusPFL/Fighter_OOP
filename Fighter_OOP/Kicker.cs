@@ -8,7 +8,9 @@ namespace Fighter_OOP
 {
     internal class Kicker : Fighter
     {
-
+        /// <summary>
+        /// Size of the feets
+        /// </summary>
         private double _footSize;
 
         public double footSize
@@ -21,10 +23,20 @@ namespace Fighter_OOP
         {
             this.footSize = footSize;
         }
+
         /// <summary>
-        /// SpecialAttack of the Kicker
+        /// Specialattack attacks the enemies
         /// </summary>
-        /// <param name="enemy">The enemy which should be Attacked</param>
+        /// <param name="enemy">The enemy which should be attacked</param>
+        public override void specialAttack(Fighter enemy)
+        {
+            enemy.hitPoints -= baseDamage * footSize;
+        }
+
+        /// <summary>
+        /// SpecialAttack of the Kicker OBSOLETE
+        /// </summary>
+        /// <param name="enemy">The enemy which should be attacked</param>
         public void Kick(Fighter enemy)
         {
             enemy.hitPoints -= baseDamage * footSize;

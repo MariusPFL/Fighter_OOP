@@ -96,7 +96,7 @@ namespace Fighter_OOP
 		}
 
 		/// <summary>
-		/// Virtual method shows the status of the player
+		/// Method shows the status of the player
 		/// </summary>
 		/// <returns></returns>
 		public virtual String getDescription()
@@ -105,7 +105,7 @@ namespace Fighter_OOP
 		}
 
 		/// <summary>
-		/// Virtual Method describe the Attacks of the Players
+		/// Method describe the Attacks of the Players
 		/// </summary>
 		/// <returns></returns>
 
@@ -114,6 +114,11 @@ namespace Fighter_OOP
             return "";
         }
 
+		public virtual void specialAttack(Fighter enemy)
+		{
+
+		}
+		
 		/// <summary>
 		/// Currently Obsolete
 		/// </summary>
