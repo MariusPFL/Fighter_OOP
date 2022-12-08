@@ -115,6 +115,11 @@ namespace Fighter_OOP
                             Console.WriteLine("Please type in a number;");
                             isInValid = true;
                         }
+                        catch (OverflowException e)
+                        {
+                            Console.WriteLine("Bitte gib seriöse Daten ein!");
+                            isInValid = true;
+                        }
                     } while (isInValid);
                     targetEnemy = fighterArr[targetEnemyIndex];
                     // User choose an attack
@@ -215,6 +220,11 @@ namespace Fighter_OOP
                     {
                         isInvalid = false;
                     }
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("Bitte gib seriöse Daten ein!");
+                    isInvalid = true;
                 }
                 catch (FormatException)
                 {

@@ -33,7 +33,7 @@ namespace Fighter_OOP
             Boolean gameIsRunning = true;
             do
             {
-                switch (Random.Next(1, 4))
+                switch (Random.Next(1, 5))
                 {
                     case 1:
                         fighter1.Attack(fighter2);
