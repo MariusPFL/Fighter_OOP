@@ -10,7 +10,9 @@ namespace Fighter_OOP
     {
         private Random Random { get; set; }
         public int RoundCounter { get; set; }
-
+        /// <summary>
+        /// Fighters Saved in the ordered by time their died
+        /// </summary>
         public List<Fighter> DeadFighterList { get; set; }
 
         public Fighter Winner { get; set; }
@@ -19,6 +21,7 @@ namespace Fighter_OOP
 
         public Game()
         {
+            RoundCounter= 0;
             DeadFighterList = new List<Fighter>();
             Random= new Random();
         }

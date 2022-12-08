@@ -10,6 +10,7 @@ namespace Fighter_OOP
     {
         static void Main(string[] args)
         {
+            List<Game> allGames = new List<Game>();
             Game game = new Game();
             Fighter[] fighterArr = new Fighter[0];
             //Kicker kicker1 = new Kicker(4.10, "Klaus der Kicker");
@@ -18,6 +19,7 @@ namespace Fighter_OOP
             #region Startmenu
             // Create the Players and Characters
             int fighterCounter = 0;
+            Boolean isPlayerSelectionFinished = false;
             do
             {
                 Console.WriteLine("Type in your Playername: ");
@@ -36,6 +38,7 @@ namespace Fighter_OOP
                     fighterArr = AddFighter(fighterArr, kicker);
                 }
                 fighterCounter++;
+
                 //BotGame
                 if (fighterCounter == 2)
                 {
@@ -46,23 +49,36 @@ namespace Fighter_OOP
                         Console.WriteLine(game.HistoryLog + Fighter.textBorder + "press any Key to continue and start a new Game");
                         Console.ReadKey();
                         fighterArr = new Fighter[0];
+                        allGames.Add(game);
                         game = new Game();
                         fighterCounter = 0;
                         Console.Clear();
-
                     }
                 }
-                // Gives User direct Feedback what is wrong
+
+                // Gives User direct Feedback
                 if (fighterCounter < 2)
                 {
                     Console.WriteLine("Fighter Counter to low should be at least 2!");
+                    isPlayerSelectionFinished= true;
                 }
-                if (fighterCounter == 99)
+                else 
                 {
-                    Console.WriteLine("Please be aware that you maximaly can add 100 Players");
+                    if (fighterCounter == 99)
+                    {
+                        Console.WriteLine("Please be aware that you maximaly can add 100 Players");
+                    }
+                    if (AnswerYN("Wanna add another Player ? (y/n)"))
+                    {
+                        isPlayerSelectionFinished = true;
+                    }
+                    else
+                    {
+                        isPlayerSelectionFinished = false;
+                    }
                 }
 
-            } while ((AnswerYN("Wanna add another Player ? (y/n)") || fighterCounter < 2) && fighterCounter < 100);
+            } while (isPlayerSelectionFinished && fighterCounter < 100);
 
 
             #endregion
@@ -76,90 +92,80 @@ namespace Fighter_OOP
             {
                 foreach (var player in fighterArr)
                 {
-                    Console.Clear();
-                    Console.WriteLine($"Hello {player.Name} it is your turn!");
-                    Console.ReadKey();
-                    // Displays the Player Status
-                    Console.WriteLine($"{player.GetDescription()}  {player.GetAttackDescription()} You have the following enemies: ");
-                    // Displays the enemies
-                    foreach (var enemy in fighterArr)
+                    if (player.HitPoints > 0)
                     {
-                        if (enemy.Index != player.Index)
+                        Console.Clear();
+                        Console.WriteLine($"Hello {player.Name} it is your turn!");
+                        Console.ReadKey();
+                        // Displays the Player Status
+                        Console.WriteLine($"{player.GetDescription()}  {player.GetAttackDescription()} You have the following enemies: ");
+                        // Displays the enemies
+                        foreach (var enemy in fighterArr)
                         {
-                            Console.WriteLine($"{enemy.GetDescription()} (press {enemy.Index} to attack him!) {Fighter.textBorder}");
-                        }
-                    }
-
-                    // User choose a Enemy to attack
-                    int targetEnemyIndex = 0;
-                    bool isInValid = true;
-                    Fighter targetEnemy;
-                    Console.WriteLine("Please type which Player you wanna attack!");
-                    do
-                    {
-                        try
-                        {
-                            targetEnemyIndex = Convert.ToInt32(Console.ReadLine());
-                            if (targetEnemyIndex < 0 || targetEnemyIndex > fighterArr.Length - 1 || targetEnemyIndex == player.Index)
+                            if (enemy.Index != player.Index)
                             {
-                                Console.WriteLine("Please type in one of the numbers above!");
+                                Console.WriteLine($"{enemy.GetDescription()} (press {enemy.Index} to attack him!) {Fighter.textBorder}");
+                            }
+                        }
+
+                        // User choose a Enemy to attack
+                        int targetEnemyIndex = 0;
+                        bool isInValid = true;
+                        Fighter targetEnemy;
+                        Console.WriteLine("Please type which Player you wanna attack!");
+                        do
+                        {
+                            try
+                            {
+                                targetEnemyIndex = Convert.ToInt32(Console.ReadLine());
+                                if (targetEnemyIndex < 0 || targetEnemyIndex > fighterArr.Length - 1 || targetEnemyIndex == player.Index)
+                                {
+                                    Console.WriteLine("Please type in one of the numbers above!");
+                                    isInValid = true;
+                                }
+                                else
+                                {
+                                    isInValid = false;
+                                }
+                            }
+                            catch (FormatException)
+                            {
+                                Console.WriteLine("Please type in a number;");
                                 isInValid = true;
                             }
-                            else
+                            catch (OverflowException e)
                             {
-                                isInValid = false;
+                                Console.WriteLine("Bitte gib seriöse Daten ein!");
+                                isInValid = true;
                             }
-                        }
-                        catch (FormatException)
+                        } while (isInValid);
+                        targetEnemy = fighterArr[targetEnemyIndex];
+                        // User choose an attack
+                        Console.WriteLine(Fighter.textBorder);
+                        if (AnswerYN($"{player.GetAttackDescription()} type in which attack you wanna execute on {targetEnemy.Name}."))
                         {
-                            Console.WriteLine("Please type in a number;");
-                            isInValid = true;
+                            player.Attack(targetEnemy);
+                            game.HistoryLog += $"{player.Name} attacked {targetEnemy.Name} with the Normalattack \n hp left \n {player.Name}: {player.HitPoints} \n {targetEnemy.Name}: {targetEnemy.HitPoints}  hp \n";
                         }
-                        catch (OverflowException e)
+                        else
                         {
-                            Console.WriteLine("Bitte gib seriöse Daten ein!");
-                            isInValid = true;
+                            player.SpecialAttack(targetEnemy);
+                            game.HistoryLog += $"{player.Name} attacked {targetEnemy.Name} with the Specialattack \n hp left \n {player.Name}: {player.HitPoints} \n {targetEnemy.Name}: {targetEnemy.HitPoints}  hp \n";
                         }
-                    } while (isInValid);
-                    targetEnemy = fighterArr[targetEnemyIndex];
-                    // User choose an attack
-                    Console.WriteLine(Fighter.textBorder);
-                    if (AnswerYN($"{player.GetAttackDescription()} type in which attack you wanna execute on {targetEnemy.Name}."))
-                    {
-                        player.Attack(targetEnemy);
-                    }
-                    else
-                    {
-                        player.SpecialAttack(targetEnemy);
-                        //if (player is Kicker)
-                        //{
-                        //    Kicker kicker = (Kicker)player;
-                        //    kicker.Kick(targetEnemy);
-                        //}
-                        //else
-                        //{
-                        //    Puncher puncher = (Puncher)player;
-                        //    puncher.Punch(targetEnemy);
-                        //}
-                    }
-                    // If the Player wanna continue
-                    //if (AnswerYN("You wanna stop playing ?"))
-                    //{
-                    //    fighterArr = RemoveFighter(fighterArr, player, game);
-                    //}
 
-
-                    // Kicks out Death Players
-                    if (HasSomeoneSurrendered(fighterArr))
-                    {
-                        fighterArr = RemoveFighter(fighterArr, WhoSurrendered(fighterArr), game);
-                        // Update the Indexes
-                        for (int i = 0; i < fighterArr.Length; i++)
+                        // Kicks out Death Players
+                        if (HasSomeoneSurrendered(fighterArr))
                         {
-                            fighterArr[i].Index = i;
+                            fighterArr = RemoveFighter(fighterArr, WhoSurrendered(fighterArr), game);
+                            // Update the Indexes
+                            for (int i = 0; i < fighterArr.Length; i++)
+                            {
+                                fighterArr[i].Index = i;
+                            }
                         }
                     }
                 }
+                game.RoundCounter++;
             } while (fighterArr.Length > 1 && continueGame);
             Console.Clear();
             #endregion
@@ -167,13 +173,18 @@ namespace Fighter_OOP
             #region end win
             fighterArr[0].Rank = 1;
             game.DeadFighterList.Add(fighterArr[0]);
-            Console.WriteLine($"Congratulation {fighterArr[0].Name} YOU DID IT YOU WON!!!! {Fighter.textBorder}");
+            Console.WriteLine($"Congratulation {fighterArr[0].Name} YOU DID IT YOU WON!!!! after {game.RoundCounter} Rounds! {Fighter.textBorder}");
             Console.WriteLine("The Ranklist: \n");
-            foreach (var item in game.DeadFighterList)
+            for (int i = game.DeadFighterList.Count - 1; i >= 0; i--)
             {
-                Console.WriteLine($"{item.Name} with Rank {item.Rank}");
+                Console.WriteLine($"{game.DeadFighterList[i].Name} with Rank {game.DeadFighterList[i].Rank} {Fighter.textBorder}");
+            }
+            if (AnswerYN("Do you wanna see the Game History ?"))
+            {
+                Console.WriteLine(Fighter.textBorder + game.HistoryLog);
             }
             Console.ReadKey();
+            allGames.Add(game);
             #endregion
 
         }
@@ -257,21 +268,6 @@ namespace Fighter_OOP
                 }
             }
             return null;
-        }
-
-
-
-
-
-        // DELETE THIS
-        public static Fighter[] ExpandArray(Fighter[] fighterArray)
-        {
-            Fighter[] endArray = new Fighter[fighterArray.Length + 1];
-            for (int i = 0; i < fighterArray.Length; i++)
-            {
-                endArray[i] = fighterArray[i];
-            }
-            return endArray;
         }
 
         /// <summary>
